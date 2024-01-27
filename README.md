@@ -12,7 +12,7 @@ Command line description:
         // -?               <- Print help information
         // -pcom71 -b38400 "-m test msg" -t
 		
-![image1](https://github.com/vanyap1/DualDisplay_wireless_thermometer/blob/main/RelatedDocu/DSC_0012_s.JPG?raw=true)
-![image2](https://github.com/vanyap1/DualDisplay_wireless_thermometer/blob/main/RelatedDocu/DSC_0009_s.JPG?raw=true)
+![image1](https://github.com/vanyap1/VFD_Clock_2004/blob/main/RelatedDocu/DSC_0012_s.JPG?raw=true)
+![image2](https://github.com/vanyap1/VFD_Clock_2004/blob/main/RelatedDocu/DSC_0009_s.JPG?raw=true)
 
 
