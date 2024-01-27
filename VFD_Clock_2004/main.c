@@ -42,7 +42,7 @@ gpio red_led = {(uint8_t *)&led_port , PORTC1};
 gpio orange_led = {(uint8_t *)&led_port , PORTC2};
 
 display vfd = {.first_line = "Ivan Prints project",
-			.second_line = "03/07/2023   {38400}",
+			.second_line = "Message from PC !@#$",
 			.ld_green = 2,
 			.ld_orange = 2,
 			.ld_red = 2
@@ -90,10 +90,10 @@ int main(void)
    
    vfd_init();
    vfd_set_cursor(1,0);
-   vfd_string((uint8_t *)"");
+   vfd_string((uint8_t *)"github.com/vanyap1");
    vfd_set_cursor(2,0);
-   vfd_string((uint8_t *)"");
-   
+   vfd_string((uint8_t *)"baud:38400 > Enjoy:)");
+   _delay_ms(3500);
    while (1) 
    {
 
