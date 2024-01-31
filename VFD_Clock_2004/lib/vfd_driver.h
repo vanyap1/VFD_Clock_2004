@@ -2,7 +2,7 @@
  * vfd_driver.h
  *
  * Created: 23.04.2023 16:53:58
- *  Author: User
+ *  Author: Ivan Prints
  */ 
 
 #include <string.h>#include <stdio.h>

@@ -2,7 +2,7 @@
  * vfd_driver.c
  *
  * Created: 23.04.2023 16:53:37
- *  Author: User
+ *  Author: Ivan Prints
  */ 
 #include "vfd_driver.h"
 #include <avr/pgmspace.h>

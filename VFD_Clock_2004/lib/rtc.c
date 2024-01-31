@@ -1,9 +1,11 @@
 /*
- * rtc.c
+ * vfd_driver.c
  *
- * Created: 29.01.2023 21:33:10
- *  Author: User
+ * Created: 23.04.2023 16:53:37
+ *  Author: Ivan Prints
  */ 
+
+
 #include "rtc.h"
 #include "twi_hal.h"
 #include <stdint.h>

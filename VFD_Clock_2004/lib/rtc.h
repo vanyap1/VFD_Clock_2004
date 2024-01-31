@@ -1,9 +1,11 @@
 /*
- * rtc.h
+ * vfd_driver.c
  *
- * Created: 29.01.2023 21:32:59
- *  Author: User
+ * Created: 23.04.2023 16:53:37
+ *  Author: Ivan Prints
  */ 
+
+
 #include <avr/io.h>
 #include "string.h"
 #include "stdbool.h"

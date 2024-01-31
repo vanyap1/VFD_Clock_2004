@@ -2,7 +2,7 @@
  * VFD_Clock_2004.c
  *
  * Created: 23.04.2023 14:57:41
- * Author : User
+ * Author : Ivan Prints
  */ 
 
 
