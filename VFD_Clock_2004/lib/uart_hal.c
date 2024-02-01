@@ -21,7 +21,7 @@ volatile static uint16_t rx_count = 0;
 volatile static uint8_t uart_tx_busy = 1;
 static uint16_t rx_read_pos = 0;
 char test_array[256]="";
-bool read_complete = true;
+bool read_complete = false;
 
 
 
@@ -120,35 +120,47 @@ uint8_t uart_read(void){
 }
 
 
-void parseString(const char* input, display* output) {
-	char* token;
-	char* rest = (char*)input;
+uint8_t parseString(const char* input, display* output, rtc_date* newDate) {
 
-	
-	token = strtok_r(rest, "/", &rest);
-	if (token) {
-		strncpy(output->first_line, token, sizeof(output->first_line) - 1);
-		output->first_line[sizeof(output->first_line) - 1] = '\0';
-	}
-
-	token = strtok_r(rest, "/", &rest);
-	if (token) {
-		strncpy(output->second_line, token, sizeof(output->second_line) - 1);
+	if (strncmp(input, "$lim", 4) == 0) {
+		strncpy(output->second_line, input + 4, sizeof(output->second_line) - 1);
 		output->second_line[sizeof(output->second_line) - 1] = '\0';
+		return TEXT_SYNC_REQUEST;
 	}
-
-	token = strtok_r(rest, "/", &rest);
-	if (token) {
-		output->ld_red = (uint8_t)atoi(token);
+	
+	if (strncmp(input, "$tim", 4) == 0){
+		char* token = strtok((char*)(input + 4), ":");
+		if (token != NULL) {
+			newDate->hour = atoi(token);
+			token = strtok(NULL, ":");
+			
+			if (token != NULL) {
+				newDate->minute = atoi(token);
+				token = strtok(NULL, ":");
+				
+				if (token != NULL) {
+					newDate->second = atoi(token);
+				}
+			}
+		}
+		return TIME_SYNC_REQUEST;
 	}
-
-	token = strtok_r(rest, "/", &rest);
-	if (token) {
-		output->ld_green = (uint8_t)atoi(token);
+	if (strncmp(input, "$dat", 4) == 0){
+		char* token = strtok((char*)(input + 4), "-");
+		if (token != NULL) {
+			newDate->date = atoi(token);
+			token = strtok(NULL, "-");
+			
+			if (token != NULL) {
+				newDate->month = atoi(token);
+				token = strtok(NULL, "-");
+				if (token != NULL) {
+					newDate->year = atoi(token);
+				}
+			}
+		}
+		return DATE_SYNC_REQUEST;
 	}
-
-	token = strtok_r(rest, "/", &rest);
-	if (token) {
-		output->ld_orange = (uint8_t)atoi(token);
-	}
+	
+	return ERROR_SYNC_REQUEST;
 }

@@ -66,7 +66,7 @@
 
 //0Eh, 1Eh � Flag Register
 
-#endif
+
 
 
 
@@ -93,3 +93,6 @@ void rtc_set(rtc_date *RTCx);
 uint8_t BCDtoDEC(uint8_t val);
 uint8_t DECtoBCD(uint8_t val);
 uint32_t convert_to_timestamp(const rtc_date *date);
+
+
+#endif

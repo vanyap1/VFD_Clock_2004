@@ -21,7 +21,7 @@ lib/twi_hal.d lib/twi_hal.o: ../lib/twi_hal.c ../lib/twi_hal.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
- ../lib/vfd_driver.h
+ ../lib/vfd_driver.h ../lib/rtc.h
 
 ../lib/twi_hal.h:
 
@@ -70,3 +70,5 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h:
 
 ../lib/vfd_driver.h:
+
+../lib/rtc.h:

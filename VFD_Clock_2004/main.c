@@ -43,9 +43,6 @@ gpio orange_led = {(uint8_t *)&led_port , PORTC2};
 
 display vfd = {.first_line = "Ivan Prints project",
 			.second_line = "Message from PC !@#$",
-			.ld_green = 2,
-			.ld_orange = 2,
-			.ld_red = 2
 };
 
 rtc_date sys_rtc = {
@@ -58,7 +55,7 @@ rtc_date sys_rtc = {
 	.second = 00
 };
 
-
+rtc_date newDate;
 
 
 
@@ -98,10 +95,33 @@ int main(void)
    {
 
 
-
+	//Next feature is screen brightness control.
+	
 	if (serial_complete()){
 		const char *data_p = serial_read_data();
-		parseString(data_p, &vfd);
+		rtc_sync(&newDate);
+		uint8_t res = parseString(data_p, &vfd, &newDate);
+		
+		switch (res) {
+			case TIME_SYNC_REQUEST:							//Time synchronization request handler
+			rtc_set(&newDate);
+			break;
+
+			case DATE_SYNC_REQUEST:							//Date synchronization request handler
+			rtc_set(&newDate);
+			break;
+			
+			case TEXT_SYNC_REQUEST:							//Write PC message
+				vfd_set_cursor(2,0);
+				vfd_string((uint8_t *)"                    "); //Clear before draw new line
+				vfd_set_cursor(2,0);
+				vfd_string((uint8_t *)vfd.second_line);
+			break;
+
+			case ERROR_SYNC_REQUEST:						
+			sprintf(vfd.second_line, "!!! data parse error");
+			break;
+		}
 	}
 
 
@@ -118,8 +138,7 @@ int main(void)
 		blink_divider = 0;
 		vfd_set_cursor(1,0);
 		vfd_string((uint8_t *)vfd.first_line);
-		vfd_set_cursor(2,0);
-		vfd_string((uint8_t *)vfd.second_line);
+		
 		//sprintf(char_array, "%d; ", led_port);			
 		//vfd_set_cursor(1,0);
 		//vfd_string((uint8_t *)char_array);

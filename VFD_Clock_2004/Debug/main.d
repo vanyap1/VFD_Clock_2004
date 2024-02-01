@@ -21,8 +21,9 @@ main.d main.o: .././main.c .././config.h \
  .././lib/uart_hal.h .././lib/../config.h .././lib/vfd_driver.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdio.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h \
- .././lib/gpio_driver.h .././lib/twi_hal.h .././lib/uart_hal.h \
- .././lib/timer1_hal.h .././lib/vfd_driver.h .././lib/rtc.h
+ .././lib/rtc.h .././lib/gpio_driver.h .././lib/twi_hal.h \
+ .././lib/uart_hal.h .././lib/timer1_hal.h .././lib/vfd_driver.h \
+ .././lib/rtc.h
 
 .././config.h:
 
@@ -73,6 +74,8 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdio.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h:
+
+.././lib/rtc.h:
 
 .././lib/gpio_driver.h:
 

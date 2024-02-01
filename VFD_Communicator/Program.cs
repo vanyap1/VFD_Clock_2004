@@ -7,15 +7,17 @@ class SerialDev
     public string SerialName { get; set; }
     public string SerialBaud { get; set; }
     public string SerialMsg { get; set; }
-    public string SerialCmd { get; set; }
+    public string SerialCmdTime { get; set; }
+    public string SerialCmdDate { get; set; }
     public bool SerialValid { get; set; }
 
-    public SerialDev(string serialName, string serialBaud, string serialMsg, string serialCmd, bool serialValid)
+    public SerialDev(string serialName, string serialBaud, string serialMsg, string serialCmdTime, string serialCmdDate, bool serialValid)
     {
         SerialName = serialName;
         SerialBaud = serialBaud;
         SerialMsg = serialMsg;
-        SerialCmd = serialCmd;
+        SerialCmdTime = serialCmdTime;
+        SerialCmdDate = serialCmdDate;
         SerialValid = serialValid;
 
     }
@@ -28,7 +30,7 @@ class Program
     static void Main(string[] args)
     {
 
-        SerialDev myPort = new SerialDev("", "", "", "", false);
+        SerialDev myPort = new SerialDev("", "", "", "", "", false);
 
         if(ParseArgs(myPort, args))
         {
@@ -76,14 +78,21 @@ class Program
                     serialPort.Write($"$lim{dataObj.SerialMsg}\r\n");
                     Task.Delay(200).Wait();
                 }
-                if(!string.IsNullOrEmpty(dataObj.SerialCmd))
+                if(!string.IsNullOrEmpty(dataObj.SerialCmdTime))
                 {
-                    serialPort.Write($"$tim{dataObj.SerialCmd}\r\n");
+                    serialPort.Write($"$tim{dataObj.SerialCmdTime}\r\n");
+                    Task.Delay(200).Wait();
+                }
+                if (!string.IsNullOrEmpty(dataObj.SerialCmdDate))
+                {
+                    serialPort.Write($"$dat{dataObj.SerialCmdDate}\r\n");
+                    Task.Delay(200).Wait();
                 }
                 return true;
             }
         }catch(Exception ex) 
-        { 
+        {
+            Console.WriteLine(ex.Message);
             return false; 
         }
     }
@@ -106,6 +115,8 @@ class Program
         Console.WriteLine("-b38400          <- stream baudrate");
         Console.WriteLine("-t               <- sync system time");
         Console.WriteLine("-t23:00:00       <- sync as custom time");
+        Console.WriteLine("-d               <- sync system time");
+        Console.WriteLine("-d02-02-24       <- sync as custom date (dd-mm-y)");
         Console.WriteLine("\"-mmy message\"   <- The argument and its value must be enclosed in quotation marks.");
         Console.WriteLine("-?               <- Print help information");
         Console.WriteLine("example call: VFD_Communicator.exe -pcom71 -b38400 \"-m test msg\" -t");
@@ -152,10 +163,17 @@ class Program
                         portObj.SerialMsg = arg.Substring(2);
                         break;
                     case "-t":
-                        portObj.SerialCmd = arg.Substring(2);
-                        if (string.IsNullOrEmpty(portObj.SerialCmd))
+                        portObj.SerialCmdTime = arg.Substring(2);
+                        if (string.IsNullOrEmpty(portObj.SerialCmdTime))
                         {
-                            portObj.SerialCmd = DateTime.Now.ToString("HH:mm:ss");
+                            portObj.SerialCmdTime = DateTime.Now.ToString("HH:mm:ss");
+                        }
+                        break;
+                    case "-d":
+                        portObj.SerialCmdDate = arg.Substring(2);
+                        if (string.IsNullOrEmpty(portObj.SerialCmdDate))
+                        {
+                            portObj.SerialCmdDate = DateTime.Now.ToString("dd-MM-yy");
                         }
                         break;
                     case "-?":

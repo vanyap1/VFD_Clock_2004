@@ -14,17 +14,14 @@
 #include <stdint.h>
 
 typedef struct {
-	char first_line[32];
-	char second_line[32];
-	uint8_t ld_red;
-	uint8_t ld_green;
-	uint8_t ld_orange;
+	char first_line[21];
+	char second_line[21];
 } display;
 
 
 //extern void parseString(const char* input, display* output);
 
-#endif  // VFD_DRIVER_H
+
 
 
 
@@ -36,3 +33,4 @@ void vfd_init();
 void vfd_string(uint8_t *c);
 void vfd_set_cursor(uint8_t line, uint8_t position);
 
+#endif  // VFD_DRIVER_H

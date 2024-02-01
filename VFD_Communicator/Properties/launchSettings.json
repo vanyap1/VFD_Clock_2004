@@ -2,7 +2,7 @@
   "profiles": {
     "VFD_Communicator": {
       "commandName": "Project",
-      "commandLineArgs": "-pcom71 -b38400 \"-m  Visual Studio\" -t"
+      "commandLineArgs": "-pcom7 -b38400 -t \"-mPC message\" -d"
     }
   }
 }
