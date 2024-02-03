@@ -80,7 +80,7 @@ int main(void)
    _delay_ms(500);
    timer1_init(0);
    uint8_t blink_divider = 0;
-   rtc_set(&sys_rtc);
+   //rtc_set(&sys_rtc);
    rtc_int_enable(&sys_rtc ,0);
    
    
