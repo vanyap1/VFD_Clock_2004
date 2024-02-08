@@ -31,9 +31,11 @@ The device can work independently or together with a PC. Messages are synchroniz
 | `-?`             | Print help information      |
 
 </pre>
->>>>>>> 92cc606126ae1e653236b99744e712355bb38ed3
+#PC Application
+![image1](https://github.com/vanyap1/VFD_Clock_2004/blob/main/RelatedDocu/pcSwScreen.png?raw=true)
 
 # First version:
+
 ![image1](https://github.com/vanyap1/VFD_Clock_2004/blob/main/RelatedDocu/DSC_0012_s.JPG?raw=true)
 ![image2](https://github.com/vanyap1/VFD_Clock_2004/blob/main/RelatedDocu/DSC_0009_s.JPG?raw=true)
 
