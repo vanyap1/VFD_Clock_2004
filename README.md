@@ -2,8 +2,9 @@
 
 The device can work independently or together with a PC. Messages are synchronized with the PC, the time is synchronized either on the PC or set by the user.
 
-
+<pre>
 # Command line description:
+<<<<<<< HEAD
 		 first char is "-" or "/"
 		 -pcom71			<- serial device
          -b38400			<- stream baudrate
@@ -16,6 +17,21 @@ The device can work independently or together with a PC. Messages are synchroniz
          -pcom71 -b38400 "-m test msg" -t
 # PC Application
 ![image1](https://github.com/vanyap1/VFD_Clock_2004/blob/main/RelatedDocu/pcSwScreen.png?raw=true)
+=======
+  first char is "-" or "/"
+  | Параметр         | Опис                       |
+|------------------|----------------------------|
+| `-pcom71`        | serial device              |
+| `-b38400`        | stream baud rate           |
+| `-t`             | sync with your PC time     |
+| `-t23:00:00`     | sync as custom time        |
+| `-d`             | sync with your PC date     |
+| `-d03-02-23`     | sync as custom date (dd-mm-y) |
+| `"-mmy message"` | The argument and its value must be enclosed in quotation marks. |
+| `-?`             | Print help information      |
+
+</pre>
+>>>>>>> 92cc606126ae1e653236b99744e712355bb38ed3
 
 # First version:
 ![image1](https://github.com/vanyap1/VFD_Clock_2004/blob/main/RelatedDocu/DSC_0012_s.JPG?raw=true)
