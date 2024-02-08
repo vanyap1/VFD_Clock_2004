@@ -14,6 +14,8 @@ The device can work independently or together with a PC. Messages are synchroniz
          "-mmy message"		<- The argument and its value must be enclosed in quotation marks.
          -?					<- Print help information
          -pcom71 -b38400 "-m test msg" -t
+# PC Application
+![image1](https://github.com/vanyap1/VFD_Clock_2004/blob/main/RelatedDocu/pcSwScreen.png?raw=true)
 
 # First version:
 ![image1](https://github.com/vanyap1/VFD_Clock_2004/blob/main/RelatedDocu/DSC_0012_s.JPG?raw=true)
