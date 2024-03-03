@@ -68,4 +68,8 @@ void vfd_string(uint8_t *c){
 		//_delay_us(300);
 		
 	}while(c[i] != '\0');
+	//for (uint8_t i; i<=20; i++){
+		//vfd_data(c[i]);
+	//}
+	//vfd_data('\n');
 }

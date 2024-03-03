@@ -46,6 +46,8 @@
             statusStrip1 = new StatusStrip();
             dateTimeLbl = new ToolStripStatusLabel();
             statusLbl = new ToolStripStatusLabel();
+            textBox1 = new TextBox();
+            cpuRamCounter = new System.Windows.Forms.Timer(components);
             PortCtrlBox.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)newItemTime).BeginInit();
@@ -108,6 +110,7 @@
             button1.TabIndex = 2;
             button1.Text = "Open";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // serialPortBauds
             // 
@@ -218,11 +221,25 @@
             statusLbl.Size = new Size(54, 17);
             statusLbl.Text = "statusLbl";
             // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(31, 128);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(155, 110);
+            textBox1.TabIndex = 4;
+            // 
+            // cpuRamCounter
+            // 
+            cpuRamCounter.Interval = 1000;
+            cpuRamCounter.Tick += cpuRamCounter_Tick;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(599, 301);
+            Controls.Add(textBox1);
             Controls.Add(statusStrip1);
             Controls.Add(groupBox1);
             Controls.Add(PortCtrlBox);
@@ -264,5 +281,7 @@
         private Label label3;
         private NumericUpDown newItemTime;
         private ToolStripStatusLabel statusLbl;
+        private TextBox textBox1;
+        private System.Windows.Forms.Timer cpuRamCounter;
     }
 }

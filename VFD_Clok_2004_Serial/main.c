@@ -38,6 +38,8 @@ rtc_date sys_rtc = {
 	.minute = 29,
 	.second = 00
 };
+
+rtc_date newDate;
 display vfd = {.first_line = "Ivan Prints project",
 	.second_line = "Message from PC !@#$",
 };
@@ -53,7 +55,7 @@ uint8_t underscoreCounter = 0;
 
 int main(void)
 {
-    uart_init(38400,1);
+    uart_init(38400,0);
 	twi1_init(400000);
 	vfd_init();
 	sei();
@@ -75,15 +77,15 @@ int main(void)
 			rtc_sync(&sys_rtc);
 			//BAT_VOLT = get_mVolt(ADC5_PIN);
 			rtc_int_request = 0;
-			printf("Date: %02d:%02d:%02d\n\r", sys_rtc.hour, sys_rtc.minute, sys_rtc.second);
+			//printf("Date: %02d:%02d:%02d\n\r", sys_rtc.hour, sys_rtc.minute, sys_rtc.second);
 			
-			sprintf(vfd.first_line, "%02d:%02d:%02d  %02d-%02d-20%02d\r", sys_rtc.hour, sys_rtc.minute, sys_rtc.second, sys_rtc.date, sys_rtc.month, sys_rtc.year);
-			sprintf(vfd.second_line, "My message ^) %1d %02d  \r", underscoreAction, underscoreCounter);
+			sprintf(vfd.first_line, " %02d:%02d:%02d %02d-%02d-20%02d", sys_rtc.hour, sys_rtc.minute, sys_rtc.second, sys_rtc.date, sys_rtc.month, sys_rtc.year);
+			//printf("My message ^) %1d %02d  \r", underscoreAction, underscoreCounter);
 			
 			vfd_set_cursor(1,1);
 			vfd_string((uint8_t *)vfd.first_line);
-			vfd_set_cursor(2,1);
-			vfd_string((uint8_t *)vfd.second_line);
+			//vfd_set_cursor(2,1);
+			//vfd_string((uint8_t *)vfd.second_line);
 			
 			
 			
@@ -94,10 +96,35 @@ int main(void)
 				underscoreAction = (underscoreAction == true) ? false : true;				
 			}
 			vfd_set_underline_marker(underscoreCounter, underscoreAction);
-			
 			vfd_set_brightness(4);
 		}
 		
+		if (serial_complete()){
+			const char *data_p = serial_read_data();
+			rtc_sync(&newDate);
+			uint8_t res = parseString(data_p, &vfd, &newDate);
+			uart_flush();
+			switch (res) {
+				case TIME_SYNC_REQUEST:							//Time synchronization request handler
+				rtc_set(&newDate);
+				break;
+
+				case DATE_SYNC_REQUEST:							//Date synchronization request handler
+				rtc_set(&newDate);
+				break;
+				
+				case TEXT_SYNC_REQUEST:							//Write PC message
+				//vfd_set_cursor(2,1);
+				//vfd_string((uint8_t *)"                    "); //Clear before draw new line
+				vfd_set_cursor(2,2);
+				vfd_string((uint8_t *)vfd.second_line);
+				break;
+
+				case ERROR_SYNC_REQUEST:
+				sprintf(vfd.second_line, "!!! data parse error");
+				break;
+			}
+		}
 		/*
 		Here will be PC handler function
 		for PC message handler,

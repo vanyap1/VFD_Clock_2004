@@ -1,3 +1,4 @@
-%CPU%;%RAM%;10
-%HDDSYS%;9
-myMessage1;4
+%CPU%,%RAM%;2
+%HDDSYS%;2
+myMessage1;2
+%TIMESYN%;1

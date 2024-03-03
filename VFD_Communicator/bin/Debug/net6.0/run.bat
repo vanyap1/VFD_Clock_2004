@@ -1,3 +1,6 @@
-VFD_Communicator.exe -pcom71 -b38400 "-mRun by bat file" -t
+
+:start
+VFD_Communicator.exe -pcom5 -b38400 "-mRun by bat file" -t
 
 pause
+goto start

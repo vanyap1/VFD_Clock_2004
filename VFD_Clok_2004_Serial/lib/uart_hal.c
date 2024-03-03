@@ -25,18 +25,24 @@ const char* serial_read_data(void){
 	//uint8_t serial_read_data(void){
 	read_complete = false;
 	rx_count=0;
+	
 	return test_array;
 }
 
 ISR(USART0_RX_vect){
 	
 	//volatile static uint16_t rx_write_pos = 0;
-	test_array[rx_count] = UDR0;
-	if (test_array[rx_count] == 0x0D){
+	
+	uint8_t res_char = UDR0;
+	
+	if (res_char == '\n'){
 		read_complete = true;
 		test_array[rx_count+1] = 0;
+	}else{
+		test_array[rx_count] = res_char;
+		rx_count++;
 	}
-	rx_count +=1;
+	
 	
 }
 
@@ -97,6 +103,9 @@ uint16_t uart_read_count(void){
 uint8_t uart_flush(void){
 	rx_count = 0;
 	rx_read_pos = 0;
+	for (int i = 0; i < sizeof(test_array) - 1; i++) {
+        test_array[i] = ' ';
+    }
 	//memset((char *)rx_buffer, 0, 128);
 	return 0;
 }
@@ -108,4 +117,56 @@ uint8_t uart_read(void){
 	rx_read_pos++;
 	rx_count--;
 	return data;
+}
+
+uint8_t parseString(const char* input, display* output, rtc_date* newDate) {
+	while (*input == '\r' || *input == '\n') {
+        input++;
+    }
+	
+	if (strncmp(input, "$lim", 4) == 0) {
+		
+		strncpy(output->second_line, input + 4, sizeof(output->second_line) - 1);
+		
+		output->second_line[sizeof(output->second_line) - 1] = '\0';
+		
+		
+		return TEXT_SYNC_REQUEST;
+	}
+	
+	if (strncmp(input, "$tim", 4) == 0){
+		char* token = strtok((char*)(input + 4), ":");
+		if (token != NULL) {
+			newDate->hour = atoi(token);
+			token = strtok(NULL, ":");
+			
+			if (token != NULL) {
+				newDate->minute = atoi(token);
+				token = strtok(NULL, ":");
+				
+				if (token != NULL) {
+					newDate->second = atoi(token);
+				}
+			}
+		}
+		return TIME_SYNC_REQUEST;
+	}
+	if (strncmp(input, "$dat", 4) == 0){
+		char* token = strtok((char*)(input + 4), "-");
+		if (token != NULL) {
+			newDate->date = atoi(token);
+			token = strtok(NULL, "-");
+			
+			if (token != NULL) {
+				newDate->month = atoi(token);
+				token = strtok(NULL, "-");
+				if (token != NULL) {
+					newDate->year = atoi(token);
+				}
+			}
+		}
+		return DATE_SYNC_REQUEST;
+	}
+	
+	return ERROR_SYNC_REQUEST;
 }

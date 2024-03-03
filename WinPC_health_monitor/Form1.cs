@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO.Ports;
@@ -13,20 +14,35 @@ namespace WinPC_health_monitor
         private NotifyIcon trayIcon;
         private ContextMenuStrip trayMenu;
         string[] baudRates = { "9600", "19200", "38400", "57600", "74800", "115200", "250000", "1000000" };
-        string[] newItemsFormatted = { "%CPU%", "%RAM%", "%HDDSYS%", "%HDD_D%", "%HDD_E%", "%NETIP%", };
+        string[] newItemsFormatted = { "%CPU%", "%RAM%", "%HDDSYS%", "%HDD_D%", "%HDD_E%", "%NETIP%", "%TIMESYN%" };
         string filePath = "messages.txt";
+        static SerialPort serialPort;
+        int msgNum, msg_time = 3;
+        static PerformanceCounter cpuCounter;
+        static PerformanceCounter ramCounter;
+        static string cpuLoad = "0";
+        static string ramLoad = "0";
+
+
+
+
+
 
         public Form1()
         {
+
             InitializeComponent();
             string[] portNames = SerialPort.GetPortNames();
+            cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+            
 
             trayIcon = new NotifyIcon()
             {
                 Icon = new Icon("ico.ico"),
                 Visible = true
             };
-
+            
             trayIcon.MouseMove += Form1_MouseMove;
 
             trayMenu = new ContextMenuStrip();
@@ -92,6 +108,62 @@ namespace WinPC_health_monitor
         }
 
 
+
+
+
+
+
+        static bool OpenPort(string portName, int portBaud)
+        {
+            Parity parity = Parity.None;
+            int dataBits = 8;
+            StopBits stopBits = StopBits.One;
+            serialPort = new SerialPort(portName, portBaud, parity, dataBits, stopBits);
+
+            try
+            {
+                serialPort.Open();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        static bool ClosePort()
+        {
+            if (serialPort.IsOpen)
+            {
+                try
+                {
+                    serialPort.Close();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        static bool WritePort(string arg)
+        {
+            if (serialPort != null && serialPort.IsOpen)
+            {
+                serialPort.Write(arg);
+                serialPort.Write("\n");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
         private bool fileHandler()
         {
             if (!File.Exists(filePath))
@@ -113,12 +185,10 @@ namespace WinPC_health_monitor
 
                         while ((line = sr.ReadLine()) != null)
                         {
-                           
+
                             string[] dataLine = line.Split(";");
 
                             dataGridView1.Rows.Add(dataLine[0], dataLine[1]);
-
-
                         }
                     }
                 }
@@ -134,7 +204,7 @@ namespace WinPC_health_monitor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            cpuRamCounter.Enabled=true;
         }
 
         private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -194,7 +264,104 @@ namespace WinPC_health_monitor
         private void timeControllUnit_Tick(object sender, EventArgs e)
         {
             dateTimeLbl.Text = DateTime.Now.ToString("s");
+
+
+
+
+            string textToScreen = dataGridView1[0, msgNum].Value.ToString();
+            //msg_time = Convert.ToInt32(dataGridView1[1, msgNum].Value);
+
+
+
+            if (msg_time == 0)
+            {
+
+                msg_time = Convert.ToInt32(dataGridView1[1, msgNum].Value);
+                msgNum++;
+            }
+            else
+            {
+                msg_time--;
+            }
+
+
+
+
+
+
+
+
+            textToScreen = textToScreen.Replace("%CPU%", CPU_Load("%CPU%"));
+            textToScreen = textToScreen.Replace("%RAM%", CPU_Load("%RAM%"));
+            textToScreen = textToScreen.Replace("%HDDSYS%", CPU_Load("%HDDSYS%"));
+            textToScreen = textToScreen.Replace("%HDD_D%", CPU_Load("%HDD_D%"));
+            textToScreen = textToScreen.Replace("%HDD_E%", CPU_Load("%HDD_E%"));
+            textToScreen = textToScreen.Replace("%NETIP%", CPU_Load("%NETIP%"));
+
+
+
+            if (msgNum >= dataGridView1.RowCount - 1) { msgNum = 0; }
+            if (textToScreen.Length < 20)
+            {
+                int spacesToAdd = 20 - textToScreen.Length;
+                for (int i = 0; i < spacesToAdd; i++)
+                {
+                    textToScreen += " ";
+                }
+            }
+            else if (textToScreen.Length > 20)
+            {
+                textToScreen = textToScreen.Substring(0, 20);
+            }
+
+            if (textToScreen.Contains("%TIMESYN%"))
+            {
+                WritePort($"$limtimeSync            ");
+            }
+            else
+            {
+
+                WritePort($"$lim{textToScreen}");
+            }
+            textBox1.Text = textToScreen;
+            //"%CPU%", "%RAM%", "%HDDSYS%", "%HDD_D%", "%HDD_E%", "%NETIP%", "%TIMESYN%"
         }
+
+        static string CPU_Load(string device)
+        {
+
+            switch (device)
+            {
+                case "%CPU%":
+                    
+                    return $"cpu-{cpuLoad}%";
+
+                case "%RAM%":
+                    return $"ram-{ramLoad}%";
+
+                case "%HDDSYS%":
+
+                    return "30%";
+
+                case "%HDD_D%":
+                    return "--";
+
+                case "%HDD_E%":
+                    return "++";
+
+                case "%NETIP%":
+
+                    return "192.168.1.1";
+
+            }
+
+
+            return "cpu-84%";
+        }
+
+
+
+
 
         private void addNewItem_Click(object sender, EventArgs e)
         {
@@ -209,6 +376,33 @@ namespace WinPC_health_monitor
         private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            if (OpenPort(serialPortNames.SelectedItem.ToString(), int.Parse(serialPortBauds.Text)))
+            {
+                button1.BackColor = Color.Lime;
+                button1.Text = "Close";
+            }
+            else
+            {
+                ClosePort();
+                button1.Text = "Open";
+                button1.BackColor = Color.Red;
+            }
+
+
+        }
+
+        private void cpuRamCounter_Tick(object sender, EventArgs e)
+        {
+            float cpuUsage = cpuCounter.NextValue();
+            float ramAvailable = ramCounter.NextValue();
+
+            cpuLoad = cpuCounter.NextValue().ToString();
+            ramLoad = ramCounter.NextValue().ToString();    
         }
     }
 }

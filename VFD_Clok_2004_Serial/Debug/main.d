@@ -18,10 +18,10 @@ main.d main.o: .././main.c .././config.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
- ../lib/uart_hal.h ../lib/../config.h ../lib/gpio_driver.h \
+ ../lib/uart_hal.h ../lib/../config.h ../lib/vfd_driver.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdio.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h \
- ../lib/twi_hal1.h \
+ ../lib/rtc.h ../lib/gpio_driver.h ../lib/twi_hal1.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\compat\twi.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\twi.h \
  ../lib/spi1_hall.h ../lib/rtc.h ../lib/adc_hal.h ../lib/vfd_driver.h
@@ -70,11 +70,15 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\
 
 ../lib/../config.h:
 
-../lib/gpio_driver.h:
+../lib/vfd_driver.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdio.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h:
+
+../lib/rtc.h:
+
+../lib/gpio_driver.h:
 
 ../lib/twi_hal1.h:
 
